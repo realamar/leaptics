@@ -7,10 +7,17 @@ import CalendlyModal from "@/components/CalendlyModal";
 // ✅ Fix: Declare hbspt type globally for TypeScript
 declare global {
   interface Window {
-    hbspt: any;
-    Calendly: any;
+    hbspt: {
+      forms: {
+        create: (options: Record<string, any>) => void;
+      };
+    };
+    Calendly: {
+      initPopupWidget: (options: { url: string }) => void;
+    };
   }
 }
+
 
 export default function ContactPage() {
   const formRef = useRef<HTMLDivElement>(null);
