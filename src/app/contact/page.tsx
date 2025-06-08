@@ -4,6 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import CalendlyModal from "@/components/CalendlyModal";
 
+// ✅ Fix: Declare hbspt type globally for TypeScript
+declare global {
+  interface Window {
+    hbspt: any;
+    Calendly: any;
+  }
+}
+
 export default function ContactPage() {
   const formRef = useRef<HTMLDivElement>(null);
   const [formCreated, setFormCreated] = useState(false);
@@ -22,16 +30,15 @@ export default function ContactPage() {
         formId: "d545016a-8905-4864-ba04-f69d583c6c2b",
         target: "#hubspotForm",
         onFormSubmitted: () => {
-          // Extract name and email from form
+          // ✅ Extract user name/email from form input
           const name = (formRef.current?.querySelector('input[name="firstname"]') as HTMLInputElement)?.value ?? "";
           const email = (formRef.current?.querySelector('input[name="email"]') as HTMLInputElement)?.value ?? "";
 
-          // Build Calendly URL with prefill
           const calendly = `https://calendly.com/algoonity/free-consultation?name=${encodeURIComponent(
             name
           )}&email=${encodeURIComponent(email)}`;
 
-          setCalendlyUrl(calendly); // Open Calendly popup
+          setCalendlyUrl(calendly);
         },
       });
 
@@ -68,11 +75,11 @@ export default function ContactPage() {
           Fill out the form below and we’ll connect with you shortly.
         </p>
 
-        {/* HubSpot Form */}
-        <div id="hubspotForm" ref={formRef} />
+        {/* ✅ HubSpot Form */}
+        <div id="hubspotForm" ref={formRef}></div>
       </div>
 
-      {/* Calendly Modal Popup */}
+      {/* ✅ Calendly Popup Modal */}
       {calendlyUrl && (
         <CalendlyModal
           url={calendlyUrl}
